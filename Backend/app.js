@@ -1,21 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 
+const { corsOptions } = require("./config/cors");
 const authRoutes = require("./routes/auth.routes");
 const roomRoutes = require("./routes/room.routes");
 
 const app = express();
 
 // Enable CORS
-const allowedOrigin = process.env.CLIENT_URL || "*";
-app.use(
-  cors({
-    origin: allowedOrigin === "*" ? "*" : allowedOrigin.split(",").map((url) => url.trim()),
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 // Body parsers
 app.use(express.json());

@@ -6,21 +6,15 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const app = require("./app");
+const { corsOptions } = require("./config/cors");
 const ConnectDB = require("./config/db");
 const setupSocket = require("./sockets/socket");
 
 const server = http.createServer(app);
 
-// Allowed origins for Socket.IO
-const clientOrigin = process.env.CLIENT_URL || "*";
-
-// Socket.IO setup supporting both WebSocket and polling transports
+// Socket.IO setup supporting both WebSocket and polling transports with shared CORS
 const io = new Server(server, {
-  cors: {
-    origin: clientOrigin === "*" ? "*" : clientOrigin.split(",").map((url) => url.trim()),
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    credentials: true,
-  },
+  cors: corsOptions,
   transports: ["websocket", "polling"],
 });
 
